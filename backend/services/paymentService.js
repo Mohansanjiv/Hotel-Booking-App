@@ -11,11 +11,11 @@ const createPaymentService = async (userId, paymentData) => {
   }
 
   const payment = await Payment.create({
-    userId,
     bookingId,
     amount,
     paymentMethod,
-    paymentStatus: "Pending",
+    transactionId: `TXN${Date.now()}`,
+    paymentStatus: "Success",
   });
 
   return payment;

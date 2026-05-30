@@ -15,9 +15,8 @@ const paymentSchema = new mongoose.Schema(
 
     transactionId: {
       type: String,
-      required: true,
+      default: () => `TXN${Date.now()}`,
     },
-
     paymentStatus: {
       type: String,
       enum: ["Pending", "Success", "Failed"],

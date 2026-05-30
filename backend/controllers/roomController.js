@@ -2,6 +2,8 @@ const roomService = require("../services/roomService");
 
 const createRoom = async (req, res) => {
   try {
+    console.log("BODY:", req.body);
+
     const room = await roomService.createRoom(req.body);
 
     res.status(201).json({
@@ -9,6 +11,7 @@ const createRoom = async (req, res) => {
       data: room,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       success: false,
       message: error.message,

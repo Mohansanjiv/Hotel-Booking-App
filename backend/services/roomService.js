@@ -1,34 +1,39 @@
 const Room = require("../models/Room");
 
-class RoomService {
-  async create(data) {
-    return Room.create(data);
-  }
+const createRoom = async (data) => {
+  return await Room.create(data);
+};
 
-  async getAll() {
-    return Room.find().populate("hotelId");
-  }
+const getAllRooms = async () => {
+  return await Room.find().populate("hotelId");
+};
 
-  async getById(id) {
-    return Room.findById(id);
-  }
+const getRoomById = async (id) => {
+  return await Room.findById(id);
+};
 
-  async getByHotel(hotelId) {
-    return Room.find({
-      hotelId,
-      availability: true,
-    });
-  }
+const getRoomsByHotel = async (hotelId) => {
+  return await Room.find({
+    hotelId,
+    availability: true,
+  });
+};
 
-  async update(id, data) {
-    return Room.findByIdAndUpdate(id, data, {
-      new: true,
-    });
-  }
+const updateRoom = async (id, data) => {
+  return await Room.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+};
 
-  async delete(id) {
-    return Room.findByIdAndDelete(id);
-  }
-}
+const deleteRoom = async (id) => {
+  return await Room.findByIdAndDelete(id);
+};
 
-module.exports = new RoomService();
+module.exports = {
+  createRoom,
+  getAllRooms,
+  getRoomById,
+  getRoomsByHotel,
+  updateRoom,
+  deleteRoom,
+};

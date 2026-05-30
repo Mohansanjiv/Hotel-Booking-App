@@ -1,8 +1,10 @@
 const bookingService = require("../services/bookingService");
 
 const createBookingCtrl = async (req, res) => {
+  console.log("REQ USER:", req.user);
+  console.log("REQ BODY:", req.body);
   try {
-    const booking = await bookingService.createBooking(req.user._id, req.body);
+    const booking = await bookingService.createBooking(req.user.id, req.body);
 
     res.status(201).json({
       success: true,
@@ -19,7 +21,7 @@ const createBookingCtrl = async (req, res) => {
 
 const getMyBookingsCtrl = async (req, res) => {
   try {
-    const bookings = await bookingService.myBookings(req.user._id);
+    const bookings = await bookingService.myBookings(req.user.id);
 
     res.status(200).json({
       success: true,
