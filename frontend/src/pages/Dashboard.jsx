@@ -281,6 +281,9 @@ function Dashboard() {
     totalBookings: 0,
     upcomingBookings: 0,
     completedBookings: 0,
+    cancelledBookings: 0,
+    totalSpent: 0,
+    favoriteCity: "-",
   });
 
   const [recentBookings, setRecentBookings] = useState([]);
@@ -291,23 +294,21 @@ function Dashboard() {
 
   const fetchDashboard = async () => {
     try {
-      const { data } = await api.get("/bookings/my");
+      const { data } = await api.get("/dashboard/user/stats");
 
       const bookings = data.data || [];
 
       setRecentBookings(bookings.slice(0, 5));
 
       setStats({
-        totalBookings: bookings.length,
-
-        upcomingBookings: bookings.filter(
-          (b) => b.bookingStatus === "Confirmed",
-        ).length,
-
-        completedBookings: bookings.filter(
-          (b) => b.bookingStatus === "Completed",
-        ).length,
+        totalBookings: data.data.totalBookings,
+        upcomingBookings: data.data.upcomingBookings,
+        completedBookings: data.data.completedBookings,
+        cancelledBookings: data.data.cancelledBookings,
+        totalSpent: data.data.totalSpent,
       });
+
+      setRecentBookings(data.data.recentBookings || []);
     } catch (error) {
       console.log(error);
     } finally {

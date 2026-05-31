@@ -6,6 +6,7 @@ const {
   stats,
   bookingAnalytics,
   revenueAnalytics,
+  userDashboardStats,
 } = require("../controllers/dashboardController");
 
 const protect = require("../middleware/authMiddleware");
@@ -13,6 +14,7 @@ const protect = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminMiddleware");
 
 router.get("/stats", protect, adminOnly, stats);
+router.get("/user/stats", protect, userDashboardStats);
 
 router.get("/bookings", protect, adminOnly, bookingAnalytics);
 

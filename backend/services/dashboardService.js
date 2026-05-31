@@ -83,9 +83,37 @@ const getRevenueAnalyticsService = async () => {
     },
   ]);
 };
+const getUserDashboardStatsService = async (userId) => {
+  const bookings = await Booking.find({
+    userId,
+  })
+    .populate("hotelId")
+    .populate("roomId");
 
+  return {
+    totalBookings: bookings.length,
+
+    upcomingBookings: bookings.filter((b) => b.bookingStatus === "Confirmed")
+      .length,
+
+    completedBookings: bookings.filter((b) => b.bookingStatus === "Completed")
+      .length,
+
+    cancelledBookings: bookings.filter((b) => b.bookingStatus === "Cancelled")
+      .length,
+
+    totalSpent: bookings
+      .filter((b) => b.bookingStatus !== "Cancelled")
+      .reduce((sum, booking) => sum + (booking.totalAmount || 0), 0),
+
+    recentBookings: bookings
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5),
+  };
+};
 module.exports = {
   getStatsService,
   getBookingAnalyticsService,
   getRevenueAnalyticsService,
+  getUserDashboardStatsService,
 };
