@@ -1,32 +1,67 @@
 const Room = require("../models/Room");
 
 const createRoom = async (data) => {
-  return await Room.create(data);
+  try {
+    return await Room.create(data);
+  } catch (error) {
+    throw new Error(`Failed to create room: ${error.message}`);
+  }
 };
 
 const getAllRooms = async () => {
-  return await Room.find().populate("hotelId");
+  const rooms = await Room.find().populate("hotelId");
+
+  if (!rooms.length) {
+    throw new Error("No rooms found");
+  }
+
+  return rooms;
 };
 
 const getRoomById = async (id) => {
-  return await Room.findById(id);
+  const room = await Room.findById(id);
+
+  if (!room) {
+    throw new Error("Room not found");
+  }
+
+  return room;
 };
 
 const getRoomsByHotel = async (hotelId) => {
-  return await Room.find({
+  const rooms = await Room.find({
     hotelId,
     availability: true,
   });
+
+  if (!rooms.length) {
+    throw new Error("No available rooms found for this hotel");
+  }
+
+  return rooms;
 };
 
 const updateRoom = async (id, data) => {
-  return await Room.findByIdAndUpdate(id, data, {
+  const room = await Room.findByIdAndUpdate(id, data, {
     new: true,
+    runValidators: true,
   });
+
+  if (!room) {
+    throw new Error("Room not found");
+  }
+
+  return room;
 };
 
 const deleteRoom = async (id) => {
-  return await Room.findByIdAndDelete(id);
+  const room = await Room.findByIdAndDelete(id);
+
+  if (!room) {
+    throw new Error("Room not found");
+  }
+
+  return room;
 };
 
 module.exports = {

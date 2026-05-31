@@ -46,20 +46,23 @@ function HotelDetails() {
 
   const fetchHotel = async () => {
     try {
-      const hotelRes = await api.get(`/hotels/${id}`);
+      const response = await api.get(`/hotels/${id}`);
 
-      setHotel(hotelRes.data.data);
+      console.log("Hotel Response:", response.data);
 
-      const roomRes = await api.get(`/rooms/hotel/${id}`);
-
-      setRooms(roomRes.data.data || []);
+      if (response.data.success && response.data.data) {
+        setHotel(response.data.data);
+      } else {
+        setHotel(null);
+      }
     } catch (error) {
-      console.log(error);
+      console.log(error.response?.data);
+
+      setHotel(null);
     } finally {
       setLoading(false);
     }
   };
-
   const handleSelectRoom = (room) => {
     setSelectedRoom(room);
   };
@@ -78,6 +81,14 @@ function HotelDetails() {
     );
   }
 
+  if (!hotel) {
+    return (
+      <Container>
+        <Typography>Hotel not found</Typography>
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Image Gallery */}
@@ -89,7 +100,7 @@ function HotelDetails() {
               component="img"
               height="450"
               image={
-                hotel.images?.length > 0
+                hotel?.images?.length > 0
                   ? hotel.images[0]
                   : "https://picsum.photos/1000/600"
               }
