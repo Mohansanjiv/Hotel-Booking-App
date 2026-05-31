@@ -65,7 +65,13 @@ function Navbar() {
 
   return (
     <>
-      <AppBar position="sticky" elevation={2}>
+      <AppBar
+        position="sticky"
+        top="0px"
+        left="0px"
+        elevation={2}
+        sx={{ width: "100%" }}
+      >
         <Toolbar>
           {/* Logo */}
 
@@ -228,34 +234,7 @@ function Navbar() {
                     <ListItemText primary="My Bookings" />
                   </ListItemButton>
                 </ListItem>
-                {/* 
-                {user?.role === "Admin" && (
-                  <>
-                    <ListItem disablePadding>
-                      <ListItemButton component={Link} to="/admin">
-                        <ListItemText primary="Admin Dashboard" />
-                      </ListItemButton>
-                    </ListItem>
 
-                    <ListItem disablePadding>
-                      <ListItemButton component={Link} to="/admin/hotels">
-                        <ListItemText primary="Manage Hotels" />
-                      </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                      <ListItemButton component={Link} to="/admin/rooms">
-                        <ListItemText primary="Manage Rooms" />
-                      </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                      <ListItemButton component={Link} to="/admin/bookings">
-                        <ListItemText primary="Manage Bookings" />
-                      </ListItemButton>
-                    </ListItem>
-                  </>
-                )} */}
                 {user?.role === "admin" && (
                   <Button color="inherit" component={Link} to="/admin">
                     Admin Panel
