@@ -13,11 +13,13 @@ const createPaymentService = async (userId, paymentData) => {
   const payment = await Payment.create({
     bookingId,
     amount,
-    paymentMethod,
-    transactionId: `TXN${Date.now()}`,
     paymentStatus: "Success",
   });
 
+  await Booking.findByIdAndUpdate(bookingId, {
+    paymentStatus: "Paid",
+    bookingStatus: "Confirmed",
+  });
   return payment;
 };
 

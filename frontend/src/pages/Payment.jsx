@@ -70,7 +70,7 @@ function Payment() {
       setProcessing(true);
       const { data } = await api.post("/payments", {
         bookingId,
-        amount: booking.totalAmount,
+        amount: booking?.totalAmount || 3999,
       });
       console.log("data", data);
 
