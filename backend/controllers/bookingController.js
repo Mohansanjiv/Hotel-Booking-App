@@ -103,7 +103,6 @@ const updateBookingStatus = async (req, res) => {
       req.params.id,
       req.body.status,
     );
-
     if (!booking) {
       return res.status(404).json({
         success: false,

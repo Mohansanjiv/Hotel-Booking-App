@@ -275,7 +275,9 @@ function MyBookings() {
     try {
       const { data } = await api.get("/bookings/my");
 
-      setBookings(data.data);
+      console.log("My Bookings API:", data);
+
+      setBookings(data.data || data.bookings || []);
     } catch (error) {
       console.log(error);
     } finally {
@@ -327,63 +329,64 @@ function MyBookings() {
       </Typography>
 
       <Grid container spacing={3}>
-        {bookings.map((booking) => (
-          <Grid item xs={12} key={booking._id}>
-            <Card elevation={3}>
-              <CardContent>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={8}>
-                    <Typography variant="h6">
-                      {booking.hotelId?.hotelName}
-                    </Typography>
+        {Array.isArray(bookings) &&
+          bookings.map((booking) => (
+            <Grid item xs={12} key={booking._id}>
+              <Card elevation={3}>
+                <CardContent>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={8}>
+                      <Typography variant="h6">
+                        {booking.hotelId?.hotelName}
+                      </Typography>
 
-                    <Typography>Room: {booking.roomId?.roomType}</Typography>
+                      <Typography>Room: {booking.roomId?.roomType}</Typography>
 
-                    <Typography>
-                      Check In:{" "}
-                      {new Date(booking.checkInDate).toLocaleDateString()}
-                    </Typography>
+                      <Typography>
+                        Check In:{" "}
+                        {new Date(booking.checkInDate).toLocaleDateString()}
+                      </Typography>
 
-                    <Typography>
-                      Check Out:{" "}
-                      {new Date(booking.checkOutDate).toLocaleDateString()}
-                    </Typography>
+                      <Typography>
+                        Check Out:{" "}
+                        {new Date(booking.checkOutDate).toLocaleDateString()}
+                      </Typography>
 
-                    <Typography>Guests: {booking.guests}</Typography>
+                      <Typography>Guests: {booking.guests}</Typography>
 
-                    <Typography fontWeight="bold" mt={1}>
-                      ₹{booking.totalAmount}
-                    </Typography>
+                      <Typography fontWeight="bold" mt={1}>
+                        ₹{booking.totalAmount}
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={4}>
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="flex-start"
+                        gap={2}
+                      >
+                        <Chip
+                          label={booking.bookingStatus}
+                          color={getStatusColor(booking.bookingStatus)}
+                        />
+
+                        {booking.bookingStatus !== "Cancelled" && (
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => cancelBooking(booking._id)}
+                          >
+                            Cancel Booking
+                          </Button>
+                        )}
+                      </Box>
+                    </Grid>
                   </Grid>
-
-                  <Grid item xs={12} md={4}>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="flex-start"
-                      gap={2}
-                    >
-                      <Chip
-                        label={booking.bookingStatus}
-                        color={getStatusColor(booking.bookingStatus)}
-                      />
-
-                      {booking.bookingStatus !== "Cancelled" && (
-                        <Button
-                          variant="outlined"
-                          color="error"
-                          onClick={() => cancelBooking(booking._id)}
-                        >
-                          Cancel Booking
-                        </Button>
-                      )}
-                    </Box>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
       </Grid>
 
       {bookings.length === 0 && (

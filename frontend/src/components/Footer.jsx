@@ -4,10 +4,16 @@ function Footer() {
   return (
     <Box
       sx={{
-        p: 3,
+        p: 2,
         textAlign: "center",
         bgcolor: "#1E293B",
         color: "#fff",
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: "100%",
+        zIndex: 100000,
       }}
     >
       <Typography>© 2026 Hotel Booking</Typography>

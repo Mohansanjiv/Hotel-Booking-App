@@ -17,6 +17,11 @@ import {
   Chip,
   CircularProgress,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 
 import {
@@ -43,6 +48,17 @@ function AdminDashboard() {
   const [rooms, setRooms] = useState([]);
 
   const [bookings, setBookings] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const [editingHotel, setEditingHotel] = useState(null);
+
+  const [formData, setFormData] = useState({
+    hotelName: "",
+    city: "",
+    address: "",
+    description: "",
+    starRating: "",
+  });
 
   useEffect(() => {
     fetchDashboard();
@@ -50,15 +66,38 @@ function AdminDashboard() {
 
   const fetchDashboard = async () => {
     try {
-      const { data } = await api.get("/dashboard/admin");
+      const statsRes = await api.get("/dashboard/stats");
 
-      setStats(data.stats);
+      const hotelsRes = await api.get("/hotels");
 
-      setHotels(data.hotels || []);
+      const roomsRes = await api.get("/rooms");
 
-      setRooms(data.rooms || []);
+      const bookingsRes = await api.get("/bookings");
 
-      setBookings(data.bookings || []);
+      //   setStats(statsRes.data.data || {});
+
+      //   setHotels(hotelsRes.data.data || []);
+
+      //   setRooms(roomsRes.data.data || []);
+
+      //   setBookings(bookingsRes.data.data || []);
+      const hotels = hotelsRes.data.data || [];
+      const rooms = roomsRes.data.data || [];
+      const bookings = bookingsRes.data.data || [];
+
+      setHotels(hotels);
+      setRooms(rooms);
+      setBookings(bookings);
+
+      setStats({
+        totalHotels: hotels.length,
+        totalRooms: rooms.length,
+        totalBookings: bookings.length,
+        totalRevenue: bookings.reduce(
+          (sum, booking) => sum + (booking.totalAmount || 0),
+          0,
+        ),
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -84,7 +123,59 @@ function AdminDashboard() {
         return "default";
     }
   };
+  const handleEditHotel = (hotel) => {
+    setEditingHotel(hotel);
 
+    setFormData({
+      hotelName: hotel.hotelName,
+      city: hotel.city,
+      address: hotel.address,
+      description: hotel.description,
+      starRating: hotel.starRating,
+    });
+
+    setOpen(true);
+  };
+  const handleDeleteHotel = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this hotel?",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`/hotels/${id}`);
+
+      setHotels(hotels.filter((hotel) => hotel._id !== id));
+
+      alert("Hotel deleted successfully");
+    } catch (error) {
+      console.log(error);
+
+      alert("Failed to delete hotel");
+    }
+  };
+  const handleSubmit = async () => {
+    try {
+      if (editingHotel) {
+        await api.put(`/hotels/${editingHotel._id}`, formData);
+
+        alert("Hotel Updated");
+      } else {
+        await api.post("/hotels", formData);
+
+        alert("Hotel Created");
+      }
+
+      setOpen(false);
+
+      setEditingHotel(null);
+
+      fetchDashboard();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={10}>
@@ -199,14 +290,18 @@ function AdminDashboard() {
                     <Button
                       size="small"
                       variant="contained"
-                      sx={{
-                        mr: 1,
-                      }}
+                      sx={{ mr: 1 }}
+                      onClick={() => handleEditHotel(hotel)}
                     >
                       Edit
                     </Button>
 
-                    <Button size="small" color="error" variant="contained">
+                    <Button
+                      size="small"
+                      color="error"
+                      variant="contained"
+                      onClick={() => handleDeleteHotel(hotel._id)}
+                    >
                       Delete
                     </Button>
                   </TableCell>
@@ -314,6 +409,92 @@ function AdminDashboard() {
           </Table>
         </TableContainer>
       </Paper>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>{editingHotel ? "Edit Hotel" : "Add Hotel"}</DialogTitle>
+
+        <DialogContent>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Hotel Name"
+            value={formData.hotelName}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                hotelName: e.target.value,
+              })
+            }
+          />
+
+          <TextField
+            fullWidth
+            margin="normal"
+            label="City"
+            value={formData.city}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                city: e.target.value,
+              })
+            }
+          />
+
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Address"
+            value={formData.address}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                address: e.target.value,
+              })
+            }
+          />
+
+          <TextField
+            fullWidth
+            margin="normal"
+            multiline
+            rows={3}
+            label="Description"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                description: e.target.value,
+              })
+            }
+          />
+
+          <TextField
+            fullWidth
+            margin="normal"
+            type="number"
+            label="Star Rating"
+            value={formData.starRating}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                starRating: e.target.value,
+              })
+            }
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+
+          <Button variant="contained" onClick={handleSubmit}>
+            {editingHotel ? "Update Hotel" : "Create Hotel"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

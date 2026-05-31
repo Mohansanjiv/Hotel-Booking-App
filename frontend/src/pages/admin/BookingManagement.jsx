@@ -61,9 +61,8 @@ function BookingManagement() {
   const updateStatus = async (bookingId, status) => {
     try {
       await api.put(`/bookings/${bookingId}/status`, {
-        bookingStatus: status,
+        status,
       });
-
       fetchBookings();
     } catch (error) {
       console.log(error);
