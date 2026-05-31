@@ -16,7 +16,7 @@ const protect = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminMiddleware");
 
 router.post("/", protect, createBookingCtrl);
-router.put("/:id/status", protect, adminOnly, bookingController.updateStatus);
+router.put("/:id/status", protect, adminOnly, updateBookingStatus);
 
 router.get("/", protect, getMyBookingsCtrl);
 
