@@ -32,7 +32,20 @@ class HotelService {
   }
 
   async getById(id) {
-    return Hotel.findById(id);
+    const hotel = await Hotel.findById(id);
+
+    if (!hotel) {
+      throw new Error("Hotel not found");
+    }
+
+    const rooms = await Room.find({
+      hotelId: id,
+    });
+
+    return {
+      ...hotel.toObject(),
+      rooms,
+    };
   }
 
   async update(id, data) {
