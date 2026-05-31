@@ -15,11 +15,15 @@ import HotelDetails from "./pages/HotelDetails";
 import Dashboard from "./pages/Dashboard";
 import MyBookings from "./pages/MyBookings";
 
-// import Booking from "./pages/Booking";
-// import Payment from "./pages/Payment";
-// import BookingSuccess from "./pages/BookingSuccess";
+import Booking from "./pages/Booking";
+import Payment from "./pages/Payment";
+import BookingSuccess from "./pages/BookingSuccess";
 
 import AdminDashboard from "./pages/AdminDashboard";
+import HotelManagement from "./pages/admin/HotelManagement";
+import RoomManagement from "./pages/admin/RoomManagement";
+import BookingManagement from "./pages/admin/BookingManagement";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   return (
@@ -59,44 +63,42 @@ function App() {
           }
         />
 
-        {/* <Route
+        <Route
           path="/booking/:roomId"
           element={
             <PrivateRoute>
               <Booking />
             </PrivateRoute>
           }
-        /> */}
+        />
 
-        {/* <Route
+        <Route
           path="/payment/:bookingId"
           element={
             <PrivateRoute>
               <Payment />
             </PrivateRoute>
           }
-        /> */}
-
-        {/* <Route
-          path="/booking-success"
+        />
+        <Route
+          path="/booking-success/:bookingId"
           element={
             <PrivateRoute>
               <BookingSuccess />
             </PrivateRoute>
           }
-        /> */}
-
-        {/* Admin */}
-
-        <Route
-          path="/admin"
-          element={
-            <PrivateRoute>
-              <AdminDashboard />
-            </PrivateRoute>
-          }
         />
 
+        {/* Admin */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+
+          <Route path="hotels" element={<HotelManagement />} />
+
+          <Route path="rooms" element={<RoomManagement />} />
+
+          <Route path="bookings" element={<BookingManagement />} />
+        </Route>
         {/* Not Found */}
 
         <Route path="*" element={<Navigate to="/" />} />

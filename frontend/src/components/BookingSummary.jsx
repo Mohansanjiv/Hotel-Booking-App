@@ -17,56 +17,58 @@ function BookingSummary({
         p: 3,
         position: "sticky",
         top: 100,
+        borderRadius: 3,
       }}
     >
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" fontWeight="bold" gutterBottom>
         Booking Summary
       </Typography>
 
       <Divider sx={{ mb: 2 }} />
 
       <Box mb={2}>
-        <Typography>Hotel:</Typography>
+        <Typography color="text.secondary">Hotel</Typography>
 
-        <Typography fontWeight="bold">{hotel?.name}</Typography>
+        <Typography fontWeight="bold">{hotel?.hotelName}</Typography>
       </Box>
 
       <Box mb={2}>
-        <Typography>Room:</Typography>
+        <Typography color="text.secondary">Room</Typography>
 
         <Typography fontWeight="bold">{room?.roomType}</Typography>
       </Box>
 
       <Box mb={2}>
-        <Typography>Check In:</Typography>
+        <Typography color="text.secondary">Check In</Typography>
 
-        <Typography>{checkIn}</Typography>
+        <Typography>{checkIn || "-"}</Typography>
       </Box>
 
       <Box mb={2}>
-        <Typography>Check Out:</Typography>
+        <Typography color="text.secondary">Check Out</Typography>
 
-        <Typography>{checkOut}</Typography>
+        <Typography>{checkOut || "-"}</Typography>
       </Box>
 
       <Box mb={2}>
-        <Typography>Guests:</Typography>
+        <Typography color="text.secondary">Guests</Typography>
 
-        <Typography>{guests}</Typography>
+        <Typography>{guests || 1}</Typography>
       </Box>
 
       <Divider sx={{ my: 2 }} />
 
-      <Typography variant="h6" color="primary">
-        Total: ₹{totalAmount}
+      <Typography variant="h6" color="primary" fontWeight="bold">
+        Total: ₹{totalAmount || 0}
       </Typography>
 
       <Button
         fullWidth
         variant="contained"
         size="large"
-        sx={{ mt: 2 }}
+        sx={{ mt: 3 }}
         onClick={onProceed}
+        disabled={!room}
       >
         {buttonText}
       </Button>

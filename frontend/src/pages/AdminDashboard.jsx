@@ -189,11 +189,11 @@ function AdminDashboard() {
             <TableBody>
               {hotels.map((hotel) => (
                 <TableRow key={hotel._id}>
-                  <TableCell>{hotel.name}</TableCell>
+                  <TableCell>{hotel.hotelName}</TableCell>
 
                   <TableCell>{hotel.city}</TableCell>
 
-                  <TableCell>{hotel.rating}</TableCell>
+                  <TableCell>{hotel.starRating}</TableCell>
 
                   <TableCell>
                     <Button
@@ -294,7 +294,7 @@ function AdminDashboard() {
                 <TableRow key={booking._id}>
                   <TableCell>{booking.userId?.name}</TableCell>
 
-                  <TableCell>{booking.hotelId?.name}</TableCell>
+                  <TableCell>{booking.hotelId?.hotelName}</TableCell>
 
                   <TableCell>
                     {new Date(booking.checkInDate).toLocaleDateString()}

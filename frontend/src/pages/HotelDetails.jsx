@@ -29,6 +29,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 
 function HotelDetails() {
+  const [rooms, setRooms] = useState([]);
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -45,9 +46,13 @@ function HotelDetails() {
 
   const fetchHotel = async () => {
     try {
-      const { data } = await api.get(`/hotels/${id}`);
+      const hotelRes = await api.get(`/hotels/${id}`);
 
-      setHotel(data);
+      setHotel(hotelRes.data.data);
+
+      const roomRes = await api.get(`/rooms/hotel/${id}`);
+
+      setRooms(roomRes.data.data || []);
     } catch (error) {
       console.log(error);
     } finally {
@@ -80,7 +85,15 @@ function HotelDetails() {
       <Grid container spacing={2} mb={4}>
         <Grid item xs={12} md={8}>
           <Card>
-            <CardMedia component="img" height="450" image={hotel.images?.[0]} />
+            <CardMedia
+              component="img"
+              height="450"
+              image={
+                hotel.images?.length > 0
+                  ? hotel.images[0]
+                  : "https://picsum.photos/1000/600"
+              }
+            />
           </Card>
         </Grid>
 
@@ -103,7 +116,7 @@ function HotelDetails() {
         <Grid item xs={12} md={8}>
           <Paper elevation={3} sx={{ p: 3 }}>
             <Typography variant="h4" fontWeight="bold">
-              {hotel.name}
+              {hotel.hotelName}
             </Typography>
 
             <Box display="flex" alignItems="center" gap={1} mt={1}>
@@ -116,7 +129,7 @@ function HotelDetails() {
               <Star color="warning" />
 
               <Typography>
-                {hotel.rating}
+                {hotel.starRating}
                 /5 Rating
               </Typography>
             </Box>
@@ -145,52 +158,51 @@ function HotelDetails() {
               Available Rooms
             </Typography>
 
-            {hotel.rooms?.map((room) => (
-              <Card
-                key={room._id}
-                sx={{
-                  mb: 2,
-                  border:
-                    selectedRoom?._id === room._id ? "2px solid #1976d2" : "",
-                }}
-              >
-                <CardContent>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} md={8}>
-                      <Typography variant="h6">{room.roomType}</Typography>
+            {hotel?.rooms?.length > 0 ? (
+              hotel.rooms.map((room) => (
+                <Card
+                  key={room._id}
+                  sx={{
+                    mb: 2,
+                    border:
+                      selectedRoom?._id === room._id ? "2px solid #1976d2" : "",
+                  }}
+                >
+                  <CardContent>
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid item xs={12} md={8}>
+                        <Typography variant="h6">
+                          {room.roomName || room.roomType}
+                        </Typography>
 
-                      <Typography>
-                        Capacity:
-                        {room.capacity}
-                      </Typography>
+                        <Typography>Capacity: {room.capacity}</Typography>
 
-                      <Typography>
-                        Room No:
-                        {room.roomNumber}
-                      </Typography>
+                        <Typography>Room No: {room.roomNumber}</Typography>
+                      </Grid>
+
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h6" color="primary">
+                          ₹{room.price}/night
+                        </Typography>
+
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          sx={{ mt: 1 }}
+                          onClick={() => navigate(`/booking/${room._id}`)}
+                        >
+                          Book Now
+                        </Button>
+                      </Grid>
                     </Grid>
-
-                    <Grid item xs={12} md={4}>
-                      <Typography variant="h6" color="primary">
-                        ₹{room.price}
-                        /night
-                      </Typography>
-
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        sx={{
-                          mt: 1,
-                        }}
-                        onClick={() => handleSelectRoom(room)}
-                      >
-                        Select Room
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Paper sx={{ p: 3 }}>
+                <Typography>No rooms available for this hotel.</Typography>
+              </Paper>
+            )}
           </Paper>
         </Grid>
 
@@ -211,7 +223,7 @@ function HotelDetails() {
 
             {selectedRoom ? (
               <>
-                <Typography>Hotel: {hotel.name}</Typography>
+                <Typography>Hotel: {hotel.hotelName}</Typography>
 
                 <Typography>Room: {selectedRoom.roomType}</Typography>
 
@@ -222,6 +234,10 @@ function HotelDetails() {
                     my: 2,
                   }}
                 />
+
+                <Typography mb={2}>
+                  Selected Room: {selectedRoom.roomType}
+                </Typography>
 
                 <Button
                   fullWidth

@@ -123,18 +123,20 @@ function Navbar() {
               </>
             ) : (
               <>
-                <Button color="inherit" component={Link} to="/dashboard">
-                  Dashboard
-                </Button>
-
-                <Button color="inherit" component={Link} to="/my-bookings">
-                  My Bookings
-                </Button>
-
-                {user.role === "Admin" && (
+                {user.role === "admin" ? (
                   <Button color="inherit" component={Link} to="/admin">
                     Admin
                   </Button>
+                ) : (
+                  <>
+                    {" "}
+                    <Button color="inherit" component={Link} to="/dashboard">
+                      Dashboard
+                    </Button>
+                    <Button color="inherit" component={Link} to="/my-bookings">
+                      My Bookings
+                    </Button>
+                  </>
                 )}
 
                 <IconButton color="inherit" onClick={handleMenuOpen}>
@@ -226,13 +228,38 @@ function Navbar() {
                     <ListItemText primary="My Bookings" />
                   </ListItemButton>
                 </ListItem>
+                {/* 
+                {user?.role === "Admin" && (
+                  <>
+                    <ListItem disablePadding>
+                      <ListItemButton component={Link} to="/admin">
+                        <ListItemText primary="Admin Dashboard" />
+                      </ListItemButton>
+                    </ListItem>
 
-                {user.role === "Admin" && (
-                  <ListItem disablePadding>
-                    <ListItemButton component={Link} to="/admin">
-                      <ListItemText primary="Admin Dashboard" />
-                    </ListItemButton>
-                  </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemButton component={Link} to="/admin/hotels">
+                        <ListItemText primary="Manage Hotels" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <ListItem disablePadding>
+                      <ListItemButton component={Link} to="/admin/rooms">
+                        <ListItemText primary="Manage Rooms" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <ListItem disablePadding>
+                      <ListItemButton component={Link} to="/admin/bookings">
+                        <ListItemText primary="Manage Bookings" />
+                      </ListItemButton>
+                    </ListItem>
+                  </>
+                )} */}
+                {user?.role === "admin" && (
+                  <Button color="inherit" component={Link} to="/admin">
+                    Admin Panel
+                  </Button>
                 )}
 
                 <ListItem disablePadding>
