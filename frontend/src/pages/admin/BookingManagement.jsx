@@ -39,7 +39,7 @@ function BookingManagement() {
 
   const fetchBookings = async () => {
     try {
-      const response = await api.get("/bookings");
+      const response = await api.get("/bookings/admin/all");
 
       console.log("Bookings API:", response.data);
 
@@ -112,14 +112,14 @@ function BookingManagement() {
 
   if (loading) {
     return (
-      <Container sx={{ py: 5 }}>
+      <Container sx={{ py: 5, textAlign: "center" }}>
         <CircularProgress />
       </Container>
     );
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ py: 2 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         Booking Management
       </Typography>
@@ -165,25 +165,110 @@ function BookingManagement() {
       {/* Table */}
 
       <Paper elevation={4}>
-        <TableContainer>
-          <Table>
+        <TableContainer
+          sx={{
+            height: "calc(100vh - 250px)",
+            overflowY: "auto",
+          }}
+        >
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Customer</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Customer
+                </TableCell>
 
-                <TableCell>Hotel</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Hotel
+                </TableCell>
 
-                <TableCell>Room</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Room
+                </TableCell>
 
-                <TableCell>Check In</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Check In
+                </TableCell>
 
-                <TableCell>Check Out</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Check Out
+                </TableCell>
 
-                <TableCell>Amount</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Amount
+                </TableCell>
 
-                <TableCell>Status</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Status
+                </TableCell>
 
-                <TableCell>Actions</TableCell>
+                <TableCell
+                  sx={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#fff",
+                    zIndex: 1000,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
 

@@ -46,6 +46,7 @@ function AdminDashboard() {
   const [hotels, setHotels] = useState([]);
 
   const [rooms, setRooms] = useState([]);
+  console.log("rooms", rooms);
 
   const [bookings, setBookings] = useState([]);
   const [open, setOpen] = useState(false);
@@ -69,21 +70,11 @@ function AdminDashboard() {
       const statsRes = await api.get("/dashboard/stats");
 
       const hotelsRes = await api.get("/hotels");
-
       const roomsRes = await api.get("/rooms");
-
-      const bookingsRes = await api.get("/bookings");
-
-      //   setStats(statsRes.data.data || {});
-
-      //   setHotels(hotelsRes.data.data || []);
-
-      //   setRooms(roomsRes.data.data || []);
-
-      //   setBookings(bookingsRes.data.data || []);
+      const bookingsRes = await api.get("/bookings/admin/all");
       const hotels = hotelsRes.data.data || [];
       const rooms = roomsRes.data.data || [];
-      const bookings = bookingsRes.data.data || [];
+      const bookings = bookingsRes.data.data || bookingsRes.data.bookings || [];
 
       setHotels(hotels);
       setRooms(rooms);
@@ -280,7 +271,7 @@ function AdminDashboard() {
             <TableBody>
               {hotels.map((hotel) => (
                 <TableRow key={hotel._id}>
-                  <TableCell>{hotel.hotelName}</TableCell>
+                  <TableCell>{hotel.roomName}</TableCell>
 
                   <TableCell>{hotel.city}</TableCell>
 
@@ -342,7 +333,7 @@ function AdminDashboard() {
             <TableBody>
               {rooms.map((room) => (
                 <TableRow key={room._id}>
-                  <TableCell>{room.roomNumber}</TableCell>
+                  <TableCell>{room.roomName}</TableCell>
 
                   <TableCell>{room.roomType}</TableCell>
 
