@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Container,
@@ -9,6 +12,27 @@ import {
 } from "@mui/material";
 
 function Home() {
+  const navigate = useNavigate();
+
+  const [searchData, setSearchData] = useState({
+    city: "",
+    checkIn: "",
+    checkOut: "",
+  });
+
+  const handleChange = (e) => {
+    setSearchData({
+      ...searchData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSearch = () => {
+    navigate(
+      `/hotels?city=${searchData.city}&checkIn=${searchData.checkIn}&checkOut=${searchData.checkOut}`,
+    );
+  };
+
   return (
     <Box>
       <Box
@@ -36,19 +60,49 @@ function Home() {
 
             <Grid container spacing={2}>
               <Grid item xs={12} md={3}>
-                <TextField fullWidth label="Location" />
+                <TextField
+                  fullWidth
+                  label="Location"
+                  name="city"
+                  value={searchData.city}
+                  onChange={handleChange}
+                />
               </Grid>
 
               <Grid item xs={12} md={3}>
-                <TextField fullWidth type="date" />
+                <TextField
+                  fullWidth
+                  type="date"
+                  name="checkIn"
+                  value={searchData.checkIn}
+                  onChange={handleChange}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </Grid>
 
               <Grid item xs={12} md={3}>
-                <TextField fullWidth type="date" />
+                <TextField
+                  fullWidth
+                  type="date"
+                  name="checkOut"
+                  value={searchData.checkOut}
+                  onChange={handleChange}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </Grid>
 
               <Grid item xs={12} md={3}>
-                <Button fullWidth variant="contained" size="large">
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  sx={{ height: "56px" }}
+                  onClick={handleSearch}
+                >
                   Search
                 </Button>
               </Grid>
