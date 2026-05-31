@@ -16,15 +16,16 @@ const protect = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminMiddleware");
 
 router.post("/", protect, createBookingCtrl);
-router.put("/:id/status", protect, adminOnly, updateBookingStatus);
 
-router.get("/", protect, getMyBookingsCtrl);
+router.get("/my", protect, getMyBookingsCtrl);
+
+router.get("/admin/all", protect, adminOnly, getAllBookings);
+
+router.put("/:id/status", protect, adminOnly, updateBookingStatus);
 
 router.get("/:id", protect, getBookingById);
 
 router.delete("/:id", protect, cancelBooking);
-
-router.get("/admin/all", protect, adminOnly, getAllBookings);
 
 router.patch("/admin/:id", protect, adminOnly, updateBookingStatus);
 
