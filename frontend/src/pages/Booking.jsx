@@ -45,8 +45,13 @@ function Booking() {
     try {
       const { data } = await api.get(`/rooms/${roomId}`);
 
-      setRoom(data.room);
-      setHotel(data.hotel);
+      console.log(data);
+
+      setRoom(data.data);
+
+      setHotel({
+        _id: data.data.hotelId,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -75,19 +80,20 @@ function Booking() {
 
   const handleBooking = async () => {
     try {
-      const { data } = await api.post("/bookings", {
+      const response = await api.post("/bookings", {
         roomId,
-        hotelId: hotel._id,
+        hotelId: room.hotelId,
         ...formData,
         totalAmount: calculateTotal(),
       });
 
-      navigate(`/payment/${data.booking._id}`);
+      console.log("BOOKING CREATED:", response.data);
+
+      navigate(`/payment/${response.data.booking._id}`);
     } catch (error) {
-      console.log(error);
+      console.log("BOOKING ERROR:", error.response?.data);
     }
   };
-
   if (loading) {
     return (
       <Container sx={{ py: 5 }}>

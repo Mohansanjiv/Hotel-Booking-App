@@ -23,19 +23,24 @@ function Payment() {
   const navigate = useNavigate();
 
   const [booking, setBooking] = useState(null);
-
+  const [paymentData, setPaymentData] = useState({
+    cardHolder: "Sanjiv Kumar",
+    cardNumber: "4111111111111111",
+    expiryDate: "12/30",
+    cvv: "123",
+  });
   const [loading, setLoading] = useState(true);
 
   const [processing, setProcessing] = useState(false);
 
   const [error, setError] = useState("");
 
-  const [paymentData, setPaymentData] = useState({
-    cardNumber: "",
-    cardHolder: "",
-    expiryDate: "",
-    cvv: "",
-  });
+  //   const [paymentData, setPaymentData] = useState({
+  //     cardNumber: "",
+  //     cardHolder: "",
+  //     expiryDate: "",
+  //     cvv: "",
+  //   });
 
   useEffect(() => {
     fetchBooking();
@@ -63,12 +68,11 @@ function Payment() {
   const handlePayment = async () => {
     try {
       setProcessing(true);
-      setError("");
-
       const { data } = await api.post("/payments", {
         bookingId,
         amount: booking.totalAmount,
       });
+      console.log("data", data);
 
       navigate(`/booking-success/${bookingId}`);
     } catch (error) {

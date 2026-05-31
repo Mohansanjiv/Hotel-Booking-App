@@ -10,9 +10,9 @@ const {
 
 const protect = require("../middleware/authMiddleware");
 
-router.post("/create", protect, createPayment);
+router.post("/", protect, createPayment);
 
-router.post("/verify", protect, verifyPayment);
+router.put("/verify", protect, verifyPayment);
 
 router.get("/:id", protect, getPayment);
 
